@@ -1,0 +1,37 @@
+name: Build and Analyze
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Analyze
+    runs-on: ubuntu-20.04  # Specify Ubuntu 20.04 as the runner
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14  # You can specify the Node.js version you need
+
+      - name: Set up Java JRE
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'  # Specify the JRE distribution you want
+
+      - name: Check Node.js version
+        run: node -v
+
+      - name: Analyze with SonarQube
+        uses: sonarsource/sonarqube-scan-action@v1  # Specify a specific version
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
+          sonar-url: ${{ secrets.SONAR_HOST_URL }}
