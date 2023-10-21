@@ -1,29 +1,37 @@
-name: Build
+name: Build and Analyze
 
 on:
   push:
     branches:
-      - master
-
+      - main
 
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
+    name: Build and Analyze
+    runs-on: ubuntu-20.04  # Specify Ubuntu 20.04 as the runner
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-   - name: install trivy
-  run: |
-    #install trivy
-    sudo apt-get install wget apt-transport-https gnupg lsb-release -y
-    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
-    echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
-    sudo apt-get update
-    sudo apt-get install trivy -y
-    #command to scan files
-    trivy fs .
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14  # You can specify the Node.js version you need
+
+      - name: Set up Java JRE
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'  # Specify the JRE distribution you want
+
+      - name: Check Node.js version
+        run: node -v
+
+      - name: Analyze with SonarQube
+        uses: sonarsource/sonarqube-scan-action@v1  # Specify a specific version
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
+          sonar-url: ${{ secrets.SONAR_HOST_URL }}
