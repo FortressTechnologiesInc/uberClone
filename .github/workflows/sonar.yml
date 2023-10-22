@@ -1,4 +1,4 @@
-name: Build and Analyze
+name: Access Private Resource
 
 on:
   push:
@@ -6,32 +6,19 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build and Analyze
-    runs-on: ubuntu-20.04  # Specify Ubuntu 20.04 as the runner
+  access-private-resource:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14  # You can specify the Node.js version you need
+      - name: Set up environment
+        run: |
+          export PRIVATE_API_KEY=$PRIVATE_API_KEY  # Set this secret in your GitHub repository
+          export PRIVATE_API_URL=https://private-api.example.com  # Replace with your private resource URL
 
-      - name: Set up Java JRE
-        uses: actions/setup-java@v2
-        with:
-          java-version: 11
-          distribution: 'adopt'  # Specify the JRE distribution you want
-
-      - name: Check Node.js version
-        run: node -v
-
-      - name: Analyze with SonarQube
-        uses: sonarsource/sonarqube-scan-action@v1  # Specify a specific version
-        with:
-          sonar-token: ${{ secrets.SONAR_TOKEN }}
-          sonar-url: ${{ secrets.SONAR_HOST_URL }}
+      - name: Access Private Resource
+        run: |
+          # You can access the private resource with the environment variables
+          curl -H "Authorization: Bearer $PRIVATE_API_KEY" $PRIVATE_API_URL
