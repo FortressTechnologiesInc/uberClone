@@ -32,7 +32,7 @@ jobs:
 
     - name: Unzip SonarScanner
       run: |
-        docker exec -u root sonarqube /bin/sh -c "ls /opt/sonar-scanner-cli-4.7.1.4182-linux.zip"
+        docker exec -u root sonarqube /bin/sh -c " /opt/sonar-scanner-cli-4.7.1.4182-linux.zip"
       # Unzip the downloaded file
 
     - name: Run SonarQube analysis
