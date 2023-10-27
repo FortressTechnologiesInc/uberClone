@@ -27,7 +27,7 @@ jobs:
 
     - name: Download SonarScanner
       run: |
-        docker exec -u root sonarqube /bin/sh -c "wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.1.4182-linux.zip"
+        docker exec -u root sonarqube /bin/sh -c "wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip"
       # Download the SonarScanner
 
     - name: Unzip SonarScanner
