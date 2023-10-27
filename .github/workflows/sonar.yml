@@ -3,7 +3,7 @@ name: SonarQube Scan
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   sonarqube_scan:
@@ -23,9 +23,9 @@ jobs:
 
     - name: Set up Docker
       run: |
-        docker pull sonarqube:latest
-        docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 sonarqube:latest
-        sleep 30
+        docker pull sonarqube:lts-community
+        docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 sonarqube:lts-community
+        sleep 2
       # You might need to adjust the sleep duration based on your SonarQube startup time
 
     - name: Run SonarQube analysis
