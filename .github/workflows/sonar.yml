@@ -32,13 +32,13 @@ jobs:
 
     - name: Unzip SonarScanner
       run: |
-         docker exec -u root  sonarqube /bin/sh -c "wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.1.4182-linux.zip -P /opt/"
-         docker exec -u root  sonarqube /bin/sh -c "unzip /opt/sonar-scanner-cli-4.7.1.4182-linux.zip -d /opt/"
+         docker exec -u root  sonarqube /bin/sh -c "wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip -P /opt/"
+         docker exec -u root  sonarqube /bin/sh -c "unzip /opt/sonar-scanner-cli-4.6.2.2472-linux.zip -d /opt/"
       # Unzip the downloaded file
 
     - name: Run SonarQube analysis
       run: |
-        docker exec -u root sonarqube /bin/sh -c "/sonar-scanner-4.7.1.4182-linux/bin/sonar-scanner -Dsonar.host.url=http://192.168.3.17:9000 -Dsonar.login=sqp_42ed2dbd626b85f0af07e33970abbcd5dcb21833"
+        docker exec -u root sonarqube /bin/sh -c "/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner -Dsonar.host.url=http://192.168.3.17:9000 -Dsonar.login=sqp_42ed2dbd626b85f0af07e33970abbcd5dcb21833"
       # Replace <SONAR_LOGIN_TOKEN> with your SonarQube login token and adjust the version as needed
 
     - name: Stop and remove SonarQube container
