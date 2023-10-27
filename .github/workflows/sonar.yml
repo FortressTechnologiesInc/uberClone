@@ -3,7 +3,7 @@ name: SonarQube Scan
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   sonarqube_scan:
@@ -13,14 +13,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14  # Adjust the Node.js version to match your project
-
-    - name: Install project dependencies
-      run: npm install  # Use yarn or another package manager if needed
-
     - name: Set up Docker
       run: |
         docker pull sonarqube:lts-community
@@ -28,10 +20,17 @@ jobs:
         sleep 2
       # You might need to adjust the sleep duration based on your SonarQube startup time
 
+    - name: Install SonarScanner
+      run: |
+        docker exec sonarqube bash -c "apt-get update && apt-get install -y unzip"
+        docker exec sonarqube bash -c "wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.1.4182-linux.zip"
+        docker exec sonarqube bash -c "unzip sonar-scanner-cli-4.7.1.4182-linux.zip"
+      # Adjust the version of SonarScanner as needed
+
     - name: Run SonarQube analysis
       run: |
-        docker run --rm -e SONAR_HOST_URL=http://192.168.3.17:9000 -e SONAR_LOGIN=sqp_42ed2dbd626b85f0af07e33970abbcd5dcb21833 -v "$(pwd):/usr/src" sonarqube:latest sonar-scanner
-      # Replace <SONAR_LOGIN_TOKEN> with your SonarQube login token
+        docker exec sonarqube bash -c "SONAR_SCANNER_HOME=/sonar-scanner-4.7.1.4182-linux ./sonar-scanner/bin/sonar-scanner -Dsonar.host.url=http://192.168.3.17:9000 -Dsonar.login=sqp_42ed2dbd626b85f0af07e33970abbcd5dcb21833"
+      # Replace <SONAR_LOGIN_TOKEN> with your SonarQube login token and adjust the version as needed
 
     - name: Stop and remove SonarQube container
       run: docker stop sonarqube
