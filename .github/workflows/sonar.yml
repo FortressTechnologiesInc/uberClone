@@ -22,14 +22,14 @@ jobs:
 
     - name: Install SonarScanner
       run: |
-        docker exec sonarqube /bin/sh -c "apt-get update && apt-get install -y unzip"
-        docker exec sonarqube /bin/sh -c "curl -o sonar-scanner-cli-4.7.1.4182-linux.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.1.4182-linux.zip"
-        docker exec sonarqube /bin/sh -c "unzip sonar-scanner-cli-4.7.1.4182-linux.zip"
+        docker exec -u root sonarqube /bin/sh -c "apt-get update && apt-get install -y unzip"
+        docker exec -u root sonarqube /bin/sh -c "curl -o sonar-scanner-cli-4.7.1.4182-linux.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.1.4182-linux.zip"
+        docker exec -u root sonarqube /bin/sh -c "unzip sonar-scanner-cli-4.7.1.4182-linux.zip"
       # Adjust the version of SonarScanner as needed
 
     - name: Run SonarQube analysis
       run: |
-        docker exec  sonarqube /bin/bash -c "/sonar-scanner-4.7.1.4182-linux/bin/sonar-scanner -Dsonar.host.url=http://192.168.3.17:9000 -Dsonar.login=sqp_42ed2dbd626b85f0af07e33970abbcd5dcb21833"
+        docker exec -u root  sonarqube /bin/bash -c "/sonar-scanner-4.7.1.4182-linux/bin/sonar-scanner -Dsonar.host.url=http://192.168.3.17:9000 -Dsonar.login=sqp_42ed2dbd626b85f0af07e33970abbcd5dcb21833"
       # Replace <SONAR_LOGIN_TOKEN> with your SonarQube login token and adjust the version as needed
 
     - name: Stop and remove SonarQube container
