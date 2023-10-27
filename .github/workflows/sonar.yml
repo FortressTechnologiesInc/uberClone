@@ -34,7 +34,7 @@ jobs:
 
     - name: Run SonarQube analysis
       run: |
-        docker exec -u 0 sonarqube /bin/sh -c "/opt/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner -Dsonar.host.url=https://192.168.3.17:9000 -Dsonar.login=squ_fcd51069e8f0f1e4838f37df32fd564c2cd4a860"
+        docker exec -u 0 sonarqube /bin/sh -c "/opt/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner -Dsonar.host.url=https://192.168.3.17:3128 -Dsonar.login=squ_fcd51069e8f0f1e4838f37df32fd564c2cd4a860"
       # Replace <SONAR_LOGIN_TOKEN> with your SonarQube login token
 
     - name: Stop and remove SonarQube container
