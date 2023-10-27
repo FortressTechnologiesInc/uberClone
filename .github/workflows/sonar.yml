@@ -22,7 +22,7 @@ jobs:
 
     - name: Install SonarScanner
       run: |
-        docker exec  sonarqube /bin/bash -c sudo "apt-get update && apt-get install -y unzip"
+        docker exec  sonarqube /bin/bash -c sudo "apt-get update && apt-get install -y sudo unzip"
         docker exec  sonarqube /bin/bash -c sudo "wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.1.4182-linux.zip"
         docker exec  sonarqube /bin/bash -c sudo "unzip sonar-scanner-cli-4.7.1.4182-linux.zip"
       # Adjust the version of SonarScanner as needed
