@@ -22,8 +22,8 @@ jobs:
 
     - name: Install SonarScanner
       run: |
-        docker exec sonarqube /bin/sh -c "apk add --no-cache unzip" # Use 'apk' package manager on Alpine-based containers
-        docker exec sonarqube /bin/sh -c "wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.1.4182-linux.zip"
+        docker exec sonarqube /bin/sh -c "apt-get update && apt-get install -y unzip"
+        docker exec sonarqube /bin/sh -c "curl -o sonar-scanner-cli-4.7.1.4182-linux.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.1.4182-linux.zip"
         docker exec sonarqube /bin/sh -c "unzip sonar-scanner-cli-4.7.1.4182-linux.zip"
       # Adjust the version of SonarScanner as needed
 
