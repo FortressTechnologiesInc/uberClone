@@ -1,39 +1,26 @@
-name: SonarQube Scan
+name: Build
 
 on:
   push:
     branches:
-      - main  # Update with your branch name
+      - master
+
 
 jobs:
-  sonarqube:
+  build:
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v2
         with:
-          node-version: 14  # Update with your Node.js version
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Clear SonarScanner Cache
-        run: |
-          rm -rf /opt/sonar-scanner/.sonar/cache
-        continue-on-error: true  # Continue even if the cache doesn't exist
-
-      - name: SonarScanner Analysis
-        run: |
-          sonar-scanner -X
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: sonarsource/sonarqube-scan-action@master
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Set your SonarQube token here
-
-      - name: Upload SonarQube Analysis Results
-        uses: SonarSource/sonarcloud-github-action@v1
-        with:
-          organization: your-organization  # Update with your SonarCloud organization key
-          token: ${{ secrets.SONAR_TOKEN }}  # Set your SonarCloud token here
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # If you wish to fail your job when the Quality Gate is red, uncomment the
+      # following lines. This would typically be used to fail a deployment.
+      # - uses: sonarsource/sonarqube-quality-gate-action@master
+      #   timeout-minutes: 5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
