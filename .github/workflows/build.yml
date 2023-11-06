@@ -3,49 +3,37 @@ name: SonarQube Scan
 on:
   push:
     branches:
-      - main
+      - main  # Update with your branch name
 
 jobs:
-  sonarqube_scan:
+  sonarqube:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14  # Update with your Node.js version
+
+      - name: Install Dependencies
+        run: npm install
 
       - name: Clear SonarScanner Cache
         run: |
           rm -rf /opt/sonar-scanner/.sonar/cache
         continue-on-error: true  # Continue even if the cache doesn't exist
 
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: 17  # Specify your desired Java version
-
-      - name: Get Latest SonarScanner Version
-        id: latest_sonar_version
-        run: |
-          latest_version=$(curl -sL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/ | grep -oP 'sonar-scanner-cli-\K[\d.]+\.zip' | sort -V | tail -n1)
-          echo "Latest SonarScanner version: $latest_version"
-          echo "::set-output name=version::$latest_version"
-        shell: bash
-
-      - name: Setup SonarScanner
-        run: |
-          latest_version="${{ steps.latest_sonar_version.outputs.version }}"
-          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$latest_version.zip
-          unzip sonar-scanner-cli-$latest_version.zip
-          export PATH="$PATH:$(pwd)/sonar-scanner-cli-$latest_version/bin"
-        shell: bash
-
       - name: SonarScanner Analysis
         run: |
           sonar-scanner -X
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Set your SonarQube token here
-      - name: Clear SonarScanner Cache
-        run: |
-          rm -rf /opt/sonar-scanner/.sonar/cache
-          continue-on-error: true  # Continue even if the cache doesn't exist
 
+      - name: Upload SonarQube Analysis Results
+        uses: SonarSource/sonarcloud-github-action@v1
+        with:
+          organization: your-organization  # Update with your SonarCloud organization key
+          token: ${{ secrets.SONAR_TOKEN }}  # Set your SonarCloud token here
