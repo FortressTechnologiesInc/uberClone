@@ -44,3 +44,8 @@ jobs:
           sonar-scanner -X
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Set your SonarQube token here
+      - name: Clear SonarScanner Cache
+        run: |
+          rm -rf /opt/sonar-scanner/.sonar/cache
+          continue-on-error: true  # Continue even if the cache doesn't exist
+
