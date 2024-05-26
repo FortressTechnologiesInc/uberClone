@@ -45,6 +45,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push uberz
+        working-directory: ./
         run: |
           docker buildx build --platform linux/amd64 -t iscanprint/uberz:2.1 .
           docker push iscanprint/uberz:2.1
